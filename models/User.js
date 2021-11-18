@@ -11,7 +11,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    //validator place holder
+    match: [/.+@.+\..+/]  
   },
   thoughts: [
     {
@@ -25,11 +25,17 @@ const userSchema = new Schema({
       ref: 'User'
     }
   ]
+},
+{
+  toJSON: {
+    virtuals: true
+  },
+  id: false
 });
 
 userSchema.virtual('friendCount').get(
   function() {
-    return this.friends.reduce((total, friends) => total + friends.length + 1, 0);
+    return this.friends.length;
   }
 )
 
