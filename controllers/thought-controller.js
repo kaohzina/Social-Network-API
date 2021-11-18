@@ -4,11 +4,10 @@ const thoughtController = {
   getAllThoughts(req, res) {
     Thought.find({})
       .populate({
-        path: "thoughts",
+        path: "reactions",
         select: "-__v",
       })
       .select("-__v")
-      .sort({ _id: -1 })
       .then((dbThoughtData) => res.json(dbThoughtData))
       .catch((err) => {
         res.sendStatus(400);
@@ -18,11 +17,6 @@ const thoughtController = {
   getThoughtById({ params }, res) {
     Thought
       .findOne({ _id: params.id })
-      .populate({
-        path: "thoughts",
-        select: "-__v",
-      })
-      .select("-__v")
       .then((dbThoughtData) => {
         if (!dbThoughtData) {
           res.sendStatus(404).json({ message: "No thought found with this id!" });
